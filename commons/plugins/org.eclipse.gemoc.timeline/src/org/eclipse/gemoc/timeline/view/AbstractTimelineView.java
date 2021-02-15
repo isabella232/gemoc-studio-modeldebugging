@@ -10,14 +10,6 @@
  *******************************************************************************/
 package org.eclipse.gemoc.timeline.view;
 
-import org.eclipse.gemoc.timeline.Activator;
-import org.eclipse.gemoc.timeline.editpart.BranchEditPart;
-import org.eclipse.gemoc.timeline.editpart.ChoiceEditPart;
-import org.eclipse.gemoc.timeline.editpart.PossibleStepEditPart;
-import org.eclipse.gemoc.timeline.editpart.TimelineEditPartFactory;
-import org.eclipse.gemoc.timeline.model.ITimelineWindowListener;
-import org.eclipse.gemoc.timeline.model.TimelineWindow;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,6 +26,13 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomListener;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+import org.eclipse.gemoc.timeline.Activator;
+import org.eclipse.gemoc.timeline.editpart.BranchEditPart;
+import org.eclipse.gemoc.timeline.editpart.ChoiceEditPart;
+import org.eclipse.gemoc.timeline.editpart.PossibleStepEditPart;
+import org.eclipse.gemoc.timeline.editpart.TimelineEditPartFactory;
+import org.eclipse.gemoc.timeline.model.ITimelineWindowListener;
+import org.eclipse.gemoc.timeline.model.TimelineWindow;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -132,10 +131,9 @@ public abstract class AbstractTimelineView extends ViewPart {
 			} else {
 				rootEditPart.getZoomManager().zoomOut();
 				final int length = getWindowLength();
-				if (provider != null
-						&& timelineWindow.getStart() + length > timelineWindow.getMaxTimelineIndex()
-								+ nbVirtualChoices
-						&& timelineWindow.getMaxTimelineIndex() + nbVirtualChoices - length >= 0) {
+				if (provider != null && timelineWindow.getStart() + length > timelineWindow
+						.getMaxTimelineIndex() + nbVirtualChoices && timelineWindow.getMaxTimelineIndex()
+								+ nbVirtualChoices - length >= 0) {
 					timelineWindow.setStart(timelineWindow.getMaxTimelineIndex() + nbVirtualChoices - length);
 				}
 			}
@@ -163,8 +161,8 @@ public abstract class AbstractTimelineView extends ViewPart {
 				switch (e.keyCode) {
 					case SWT.ARROW_LEFT:
 						// shift the TimelineWindow if needed
-						if (timelineWindow.getStart() > part.getModel().getChoice().getIndex() - 1
-								&& part.getModel().getChoice().getIndex() - 1 >= 0) {
+						if (timelineWindow.getStart() > part.getModel().getChoice().getIndex() - 1 && part
+								.getModel().getChoice().getIndex() - 1 >= 0) {
 							if (follow) {
 								toggleFollow();
 							}
@@ -175,9 +173,8 @@ public abstract class AbstractTimelineView extends ViewPart {
 
 					case SWT.ARROW_RIGHT:
 						// shift the TimelineWindow if needed
-						if (timelineWindow.getEnd() <= part.getModel().getChoice().getIndex() + 1
-								&& part.getModel().getChoice().getIndex() + 1 <= timelineWindow
-										.getMaxTimelineIndex()
+						if (timelineWindow.getEnd() <= part.getModel().getChoice().getIndex() + 1 && part
+								.getModel().getChoice().getIndex() + 1 <= timelineWindow.getMaxTimelineIndex()
 										+ nbVirtualChoices) {
 							timelineWindow.setStart(timelineWindow.getStart() + 1);
 						}
@@ -259,10 +256,8 @@ public abstract class AbstractTimelineView extends ViewPart {
 			if (originMousePosition != null) {
 				final FigureCanvas canvas = (FigureCanvas)timelineViewer.getControl();
 				canvas.scrollTo(offset.x, offset.y - e.y + originMousePosition.y);
-				final int shift = (int)((-e.x + originMousePosition.x)
-						/ (PossibleStepEditPart.SIZE + BranchEditPart.SPACING) / rootEditPart
-						.getZoomManager().getZoom())
-						- doneShift;
+				final int shift = (int)((-e.x + originMousePosition.x) / (PossibleStepEditPart.SIZE
+						+ BranchEditPart.SPACING) / rootEditPart.getZoomManager().getZoom()) - doneShift;
 				final int multiplier;
 				if ((e.stateMask & SWT.MOD1) != 0) {
 					multiplier = timelineWindow.getLength();
@@ -274,10 +269,8 @@ public abstract class AbstractTimelineView extends ViewPart {
 				}
 				if (timelineWindow.getStart() + shift * multiplier < 0) {
 					timelineWindow.setStart(0);
-				} else if (provider != null
-						&& timelineWindow.getStart() + timelineWindow.getLength() + shift * multiplier > timelineWindow
-								.getMaxTimelineIndex()
-								+ nbVirtualChoices) {
+				} else if (provider != null && timelineWindow.getStart() + timelineWindow.getLength() + shift
+						* multiplier > timelineWindow.getMaxTimelineIndex() + nbVirtualChoices) {
 					timelineWindow.setStart(Math.max(timelineWindow.getMaxTimelineIndex() + nbVirtualChoices
 							- timelineWindow.getLength(), 0));
 				} else if (shift != 0) {
@@ -304,12 +297,11 @@ public abstract class AbstractTimelineView extends ViewPart {
 					if (!timelineSlider.isDisposed()) {
 						timelineSlider.setMaximum(timelineWindow.getMaxTimelineIndex() + nbVirtualChoices);
 						timelineSlider.setVisible(timelineWindow.getLength() < timelineWindow
-								.getMaxTimelineIndex()
-								+ nbVirtualChoices);
+								.getMaxTimelineIndex() + nbVirtualChoices);
 					}
 					if (follow && provider != null) {
-						int start = timelineWindow.getMaxTimelineIndex() + nbVirtualChoices
-								- timelineWindow.getLength();
+						int start = timelineWindow.getMaxTimelineIndex() + nbVirtualChoices - timelineWindow
+								.getLength();
 						if (start < 0) {
 							start = 0;
 						}
@@ -343,11 +335,10 @@ public abstract class AbstractTimelineView extends ViewPart {
 						timelineSlider.setPageIncrement(length);
 						timelineSlider.setThumb(length);
 						if (provider != null) {
-							timelineSlider
-									.setMaximum(timelineWindow.getMaxTimelineIndex() + nbVirtualChoices);
-							timelineSlider.setVisible(timelineWindow.getLength() < timelineWindow
-									.getMaxTimelineIndex()
+							timelineSlider.setMaximum(timelineWindow.getMaxTimelineIndex()
 									+ nbVirtualChoices);
+							timelineSlider.setVisible(timelineWindow.getLength() < timelineWindow
+									.getMaxTimelineIndex() + nbVirtualChoices);
 						} else {
 							timelineSlider.setVisible(false);
 						}
@@ -464,7 +455,9 @@ public abstract class AbstractTimelineView extends ViewPart {
 		gridData.grabExcessVerticalSpace = true;
 		timelineViewer.getControl().setLayoutData(gridData);
 		timelineViewer.setEditPartFactory(getTimelineEditPartFactory());
-		timelineWindow = new TimelineWindow(provider);
+		if (timelineWindow == null) {
+			timelineWindow = new TimelineWindow(provider);
+		}
 		timelineViewer.setContents(timelineWindow);
 		timelineSlider.setPageIncrement(timelineWindow.getLength());
 		timelineSlider.setThumb(timelineWindow.getLength());
@@ -495,7 +488,9 @@ public abstract class AbstractTimelineView extends ViewPart {
 			}
 
 		});
-		timelineWindowListener = new TimelineWindowListener();
+		if (timelineWindowListener == null) {
+			timelineWindowListener = new TimelineWindowListener();
+		}
 		timelineWindow.addTimelineWindowListener(timelineWindowListener);
 		if (provider != null) {
 			provider.addTimelineListener(timelineWindowListener);
@@ -603,17 +598,17 @@ public abstract class AbstractTimelineView extends ViewPart {
 				handlerService.executeCommand(commandId, null);
 			}
 		} catch (ExecutionException e1) {
-			Activator.getDefault().getLog().log(
-					new Status(Status.ERROR, Activator.PLUGIN_ID, e1.getMessage()));
+			Activator.getDefault().getLog().log(new Status(Status.ERROR, Activator.PLUGIN_ID, e1
+					.getMessage()));
 		} catch (NotDefinedException e1) {
-			Activator.getDefault().getLog().log(
-					new Status(Status.ERROR, Activator.PLUGIN_ID, e1.getMessage()));
+			Activator.getDefault().getLog().log(new Status(Status.ERROR, Activator.PLUGIN_ID, e1
+					.getMessage()));
 		} catch (NotEnabledException e1) {
-			Activator.getDefault().getLog().log(
-					new Status(Status.ERROR, Activator.PLUGIN_ID, e1.getMessage()));
+			Activator.getDefault().getLog().log(new Status(Status.ERROR, Activator.PLUGIN_ID, e1
+					.getMessage()));
 		} catch (NotHandledException e1) {
-			Activator.getDefault().getLog().log(
-					new Status(Status.ERROR, Activator.PLUGIN_ID, e1.getMessage()));
+			Activator.getDefault().getLog().log(new Status(Status.ERROR, Activator.PLUGIN_ID, e1
+					.getMessage()));
 		}
 	}
 
@@ -635,6 +630,14 @@ public abstract class AbstractTimelineView extends ViewPart {
 	 *            the new start
 	 */
 	public void setTimelineProvider(ITimelineProvider timelineProvider, int start) {
+
+		if (timelineWindow == null) {
+			timelineWindow = new TimelineWindow(timelineProvider);
+		}
+		if (timelineWindowListener == null) {
+			timelineWindowListener = new TimelineWindowListener();
+		}
+
 		timelineWindow.setProvider(timelineProvider, start);
 		if (this.provider != null) {
 			this.provider.removeTimelineListener(timelineWindowListener);
@@ -644,6 +647,7 @@ public abstract class AbstractTimelineView extends ViewPart {
 			this.provider.addTimelineListener(timelineWindowListener);
 		}
 		timelineWindow.setLength(getWindowLength());
+
 	}
 
 	/**
@@ -681,12 +685,11 @@ public abstract class AbstractTimelineView extends ViewPart {
 				averageWidth = Math.max(averageWidth, widthes[0]);
 				lastChoiceWidth = Math.max(lastChoiceWidth, (int)widthes[1]);
 			}
-			final double baseWidth = (averageWidth + BranchEditPart.SPACING)
-					* rootEditPart.getZoomManager().getZoom();
+			final double baseWidth = (averageWidth + BranchEditPart.SPACING) * rootEditPart.getZoomManager()
+					.getZoom();
 			if (timelineViewer.getControl().getBounds().width > 2 * BranchEditPart.MARGIN) {
-				length = (int)Math
-						.floor((timelineViewer.getControl().getBounds().width - 2 * BranchEditPart.MARGIN)
-								/ baseWidth);
+				length = (int)Math.floor((timelineViewer.getControl().getBounds().width - 2
+						* BranchEditPart.MARGIN) / baseWidth);
 			} else {
 				length = 0;
 			}
@@ -745,7 +748,8 @@ public abstract class AbstractTimelineView extends ViewPart {
 	 * @return the created detail {@link TreeViewer}
 	 */
 	protected TreeViewer createDetailViewer(Composite parent) {
-		final FilteredTree treeViewer = new FilteredTree(parent, SWT.None, createDetailPatternFilter(), false);
+		final FilteredTree treeViewer = new FilteredTree(parent, SWT.None, createDetailPatternFilter(),
+				false);
 		return treeViewer.getViewer();
 	}
 
